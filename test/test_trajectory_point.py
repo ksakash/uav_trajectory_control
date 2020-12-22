@@ -23,7 +23,7 @@ import sys
 import unittest
 import numpy as np
 from uav_trajectory_generator import TrajectoryPoint
-from uav_control_msgs.msg import TrajectoryPoint as TrajectoryPointMsg
+from uav_trajectory_control.msg import TrajectoryPoint as TrajectoryPointMsg
 
 
 class TestTrajectoryPoint(unittest.TestCase):

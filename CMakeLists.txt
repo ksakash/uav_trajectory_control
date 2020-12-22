@@ -12,6 +12,7 @@ add_message_files(
     TrajectoryPoint.msg
     Waypoint.msg
     WaypointSet.msg
+    AUVCommand.msg
 )
 
 add_service_files(

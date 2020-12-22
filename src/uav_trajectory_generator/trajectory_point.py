@@ -15,7 +15,7 @@
 
 import rospy
 import numpy as np
-from uav_control_msgs.msg import TrajectoryPoint as TrajectoryPointMsg
+from uav_trajectory_control.msg import TrajectoryPoint as TrajectoryPointMsg
 import geometry_msgs.msg as geometry_msgs
 from tf.transformations import quaternion_from_euler, euler_from_quaternion, quaternion_matrix
 

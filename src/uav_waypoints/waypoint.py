@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import numpy as np
-from uav_control_msgs.msg import Waypoint as WaypointMessage
+from uav_trajectory_control.msg import Waypoint as WaypointMessage
 
 
 class Waypoint(object):

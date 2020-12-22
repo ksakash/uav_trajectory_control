@@ -54,7 +54,7 @@ class DPControllerLocalPlanner(object):
 
         self._lock = Lock()
 
-        self._traj_interpolator = uuv_trajectory_generator.TrajectoryGenerator(
+        self._traj_interpolator = uav_trajectory_generator.TrajectoryGenerator(
             full_dof=full_dof, stamped_pose_only=stamped_pose_only)
 
         # Max. allowed forward speed

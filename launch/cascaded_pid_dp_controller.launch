@@ -38,27 +38,31 @@
   </include-->
 
   <group ns="uav0">
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/inertial.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/vel_pid_control.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/pos_pid_control.yaml" command="load"/>
+    <arg name="uav_name" default="uav0"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/inertial.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/vel_pid_control.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/pos_pid_control.yaml" command="load"/>
   </group>
 
   <group ns="uav1">
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/inertial.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/vel_pid_control.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/pos_pid_control.yaml" command="load"/>
+    <arg name="uav_name" default="uav1"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/inertial.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/vel_pid_control.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/pos_pid_control.yaml" command="load"/>
   </group>
 
   <group ns="uav2">
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/inertial.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/vel_pid_control.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/pos_pid_control.yaml" command="load"/>
+    <arg name="uav_name" default="uav2"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/inertial.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/vel_pid_control.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/pos_pid_control.yaml" command="load"/>
   </group>
 
   <group ns="uav3">
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/inertial.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/vel_pid_control.yaml" command="load"/>
-    <rosparam file="$(find uuv_control_cascaded_pid)/config/$(arg model_name)/pos_pid_control.yaml" command="load"/>
+    <arg name="uav_name" default="uav3"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/inertial.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/vel_pid_control.yaml" command="load"/>
+    <rosparam file="$(find uav_trajectory_control)/config/$(arg uav_name)/pos_pid_control.yaml" command="load"/>
   </group>
 
   <!-- <group ns="$(arg uuv_name)">
@@ -94,7 +98,7 @@
   </group> -->
 
     <group ns="uav0">
-    <!-- <node pkg="uuv_trajectory_control"
+    <!-- <node pkg="uav_trajectory_control"
           type="cascaded_pid_dp_controller.py"
           name="cascaded_pid_dp_controller"
           output="screen"
@@ -109,7 +113,7 @@
       <remap from="thruster_output" to="thruster_manager/input_stamped"/>
     </node> -->
 
-    <node pkg="uuv_trajectory_control"
+    <node pkg="uav_trajectory_control"
           type="cascaded_pid_dp_controller.py"
           name="cascaded_pid_dp_controller"
           output="screen"
@@ -123,14 +127,14 @@
       <remap from="reference" to="dp_controller/reference"/>
       <remap from="thruster_output" to="thruster_manager/input_stamped"/>
     </node>
-    <node pkg="uuv_trajectory_control"
+    <node pkg="uav_trajectory_control"
           type="odom_redirect.py"
           name="odom_redirect"
           output="screen" />
     </group>
 
     <group ns="uav1">
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="cascaded_pid_dp_controller.py"
             name="cascaded_pid_dp_controller"
             output="screen"
@@ -143,14 +147,14 @@
             <remap from="reference" to="dp_controller/reference"/>
             <remap from="thruster_output" to="thruster_manager/input_stamped"/>
         </node>
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="odom_redirect.py"
             name="odom_redirect"
             output="screen" />
     </group>
 
     <group ns="uav2">
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="cascaded_pid_dp_controller.py"
             name="cascaded_pid_dp_controller"
             output="screen"
@@ -163,14 +167,14 @@
             <remap from="reference" to="dp_controller/reference"/>
             <remap from="thruster_output" to="thruster_manager/input_stamped"/>
         </node>
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="odom_redirect.py"
             name="odom_redirect"
             output="screen" />
     </group>
 
     <group ns="uav3">
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="cascaded_pid_dp_controller.py"
             name="cascaded_pid_dp_controller"
             output="screen"
@@ -183,7 +187,7 @@
             <remap from="reference" to="dp_controller/reference"/>
             <remap from="thruster_output" to="thruster_manager/input_stamped"/>
         </node>
-        <node pkg="uuv_trajectory_control"
+        <node pkg="uav_trajectory_control"
             type="odom_redirect.py"
             name="odom_redirect"
             output="screen" />

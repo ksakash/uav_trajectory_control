@@ -8,7 +8,8 @@ setup_args = generate_distutils_setup(
     packages=['uav_control_interfaces',
               'uav_trajectory_generator',
               'uav_waypoints',
-              'uav_trajectory_generator.path_generator'],
+              'uav_trajectory_generator.path_generator',
+              'uav_control_interfaces.PID'],
     package_dir={'': 'src'},
     requires=['std_msgs', 'rospy']
 )

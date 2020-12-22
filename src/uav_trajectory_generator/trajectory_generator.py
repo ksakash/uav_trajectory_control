@@ -17,7 +17,7 @@ import rospy
 import numpy as np
 from copy import deepcopy
 from geometry_msgs.msg import Vector3, PoseStamped, Quaternion
-import uav_control_msgs.msg as uav_control_msgs
+import uav_trajectory_control.msg as uav_control_msgs
 from nav_msgs.msg import Path
 from .wp_trajectory_generator import WPTrajectoryGenerator
 from uav_waypoints import WaypointSet
