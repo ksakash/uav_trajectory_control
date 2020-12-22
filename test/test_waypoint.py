@@ -21,7 +21,7 @@ roslib.load_manifest(PKG)
 
 import sys
 import unittest
-from uuv_waypoints import Waypoint
+from uav_waypoints import Waypoint
 
 
 class TestWaypoint(unittest.TestCase):

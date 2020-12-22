@@ -19,15 +19,15 @@ from copy import deepcopy
 from os.path import isfile
 from std_msgs.msg import Bool, Float64
 from geometry_msgs.msg import Twist, Point
-from uuv_control_msgs.srv import *
+from uav_trajectory_control.srv import *
 from nav_msgs.msg import Odometry
 from rospy.numpy_msg import numpy_msg
 
-from uuv_control_msgs.msg import Trajectory, TrajectoryPoint, WaypointSet
+from uav_trajectory_control.msg import Trajectory, TrajectoryPoint, WaypointSet
 from visualization_msgs.msg import MarkerArray
 from geometry_msgs.msg import Point, Pose
-import uuv_trajectory_generator
-import uuv_waypoints
+import uav_trajectory_generator
+import uav_waypoints
 import logging
 import sys
 import tf2_ros

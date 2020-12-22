@@ -22,8 +22,8 @@ roslib.load_manifest(PKG)
 import sys
 import unittest
 import numpy as np
-from uuv_trajectory_generator import TrajectoryPoint
-from uuv_control_msgs.msg import TrajectoryPoint as TrajectoryPointMsg
+from uav_trajectory_generator import TrajectoryPoint
+from uav_control_msgs.msg import TrajectoryPoint as TrajectoryPointMsg
 
 
 class TestTrajectoryPoint(unittest.TestCase):

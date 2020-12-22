@@ -4,14 +4,63 @@ project(uav_trajectory_control)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED geometry_msgs message_generation)
+
+add_message_files(
+    FILES
+    Trajectory.msg
+    TrajectoryPoint.msg
+    Waypoint.msg
+    WaypointSet.msg
+)
+
+add_service_files(
+    FILES
+    AddWaypoint.srv
+    ClearWaypoints.srv
+    InitCircularTrajectory.srv
+    InitHelicalTrajectory.srv
+    InitWaypointsFromFile.srv
+    GetWaypoints.srv
+    GoTo.srv
+    GoToPose.srv
+    GoToIncremental.srv
+    Hold.srv
+    IsRunningTrajectory.srv
+    InitWaypointSet.srv
+    InitRectTrajectory.srv
+    StartTrajectory.srv
+    SwitchToAutomatic.srv
+    SwitchToManual.srv
+    SetPIDParams.srv
+    GetPIDParams.srv
+    SetSMControllerParams.srv
+    GetSMControllerParams.srv
+    SetMBSMControllerParams.srv
+    GetMBSMControllerParams.srv
+    ResetController.srv
+    TrajectoryComplete.srv
+    PoseReach.srv
+    CancelRequest.srv
+    BottomSearch.srv
+    FrontSearch.srv
+    StallVehicle.srv
+)
+
+generate_messages(
+    DEPENDENCIES
+    std_msgs
+    geometry_msgs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
 catkin_python_setup()
 
-catkin_package()
+catkin_package(
+    CATKIN_DEPENDS geometry_msgs message_runtime
+)
 
 catkin_install_python(PROGRAMS scripts/cascaded_pid_dp_controller.py
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

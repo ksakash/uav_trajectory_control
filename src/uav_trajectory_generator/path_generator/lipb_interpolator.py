@@ -16,7 +16,7 @@
 from copy import deepcopy
 from scipy.interpolate import splrep, splev, interp1d
 import numpy as np
-from uuv_waypoints import Waypoint, WaypointSet
+from uav_waypoints import Waypoint, WaypointSet
 from ..trajectory_point import TrajectoryPoint
 from tf.transformations import quaternion_multiply, quaternion_about_axis
 from line_segment import LineSegment

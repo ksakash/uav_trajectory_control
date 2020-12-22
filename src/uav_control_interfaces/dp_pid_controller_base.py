@@ -15,8 +15,8 @@
 
 import numpy as np
 import rospy
-from uuv_control_msgs.srv import *
-from uuv_control_interfaces.dp_controller_base import DPControllerBase
+from uav_trajectory_control.srv import *
+from uav_control_interfaces.dp_controller_base import DPControllerBase
 import tf.transformations as trans
 import math
 from PID import PIDRegulator
@@ -116,4 +116,4 @@ class DPPIDControllerBase(DPControllerBase):
         return np.dot(self._Kp, self.error_pose_euler) \
             + np.dot(self._Kd, self._errors['vel']) \
             + np.dot(self._Ki, self._int)
-        
+

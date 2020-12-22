@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import numpy as np
-from uuv_waypoints import Waypoint, WaypointSet
+from uav_waypoints import Waypoint, WaypointSet
 from helical_segment import HelicalSegment
 from bezier_curve import BezierCurve
 from path_generator import PathGenerator

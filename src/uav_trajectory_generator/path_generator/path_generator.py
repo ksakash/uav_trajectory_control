@@ -16,7 +16,7 @@
 import rospy
 import numpy as np
 from copy import deepcopy
-from uuv_waypoints import Waypoint, WaypointSet
+from uav_waypoints import Waypoint, WaypointSet
 from ..trajectory_point import TrajectoryPoint
 from tf.transformations import quaternion_multiply, quaternion_about_axis, \
     quaternion_from_euler, rotation_matrix, quaternion_from_matrix
