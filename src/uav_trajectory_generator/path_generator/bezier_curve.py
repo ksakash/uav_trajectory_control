@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import numpy as np
-from scipy.misc import factorial
+from scipy.special import factorial
 
 
 class BezierCurve(object):
@@ -254,7 +254,7 @@ if __name__ == '__main__':
 
     np.set_printoptions(suppress=True, precision=2)
 
-    print 'Test - Cubic Bezier curve'
+    print ('Test - Cubic Bezier curve')
     q_x = [0, 1, 2, 4, 5, 6]
     q_y = [0, 2, 3, 3, 2, 0]
     q_z = [0, 1, 0, 0, 2, 2]

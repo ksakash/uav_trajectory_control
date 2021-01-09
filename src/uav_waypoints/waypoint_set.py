@@ -17,7 +17,7 @@ import rospy
 import numpy as np
 import os
 import yaml
-from waypoint import Waypoint
+from uav_waypoints import Waypoint
 from uav_trajectory_control.msg import WaypointSet as WaypointSetMessage
 from visualization_msgs.msg import Marker, MarkerArray
 from nav_msgs.msg import Path
@@ -104,7 +104,7 @@ class WaypointSet(object):
                 else:
                     self._waypoints = [waypoint] + self._waypoints
             else:
-                print 'Cannot add repeated waypoint'
+                print ('Cannot add repeated waypoint')
                 return False
         else:
             if not add_to_beginning:
@@ -139,7 +139,7 @@ class WaypointSet(object):
 
     def read_from_file(self, filename):
         if not os.path.isfile(filename):
-            print 'Invalid waypoint filename, file', filename
+            print ('Invalid waypoint filename, file', filename)
             return False
         try:
             self.clear_waypoints()
@@ -172,9 +172,9 @@ class WaypointSet(object):
                             use_fixed_heading=wp_data['use_fixed_heading'],
                             inertial_frame_id=wps['inertial_frame_id'])
                         self.add_waypoint(wp)
-        except Exception, e:
-            print 'Error while loading the file'
-            print str(e)
+        except Exception as e:
+            print ('Error while loading the file')
+            print (str(e))
             return False
         return True
 
@@ -191,9 +191,9 @@ class WaypointSet(object):
             with open(os.path.join(path, filename), 'w') as wp_file:
                 yaml.dump(output, wp_file, default_flow_style=False)
             return True
-        except Exception, e:
-            print 'Error occured while exporting waypoint file'
-            print str(e)
+        except Exception as e:
+            print ('Error occured while exporting waypoint file')
+            print (str(e))
             return False
 
     def to_message(self):
@@ -286,15 +286,15 @@ class WaypointSet(object):
     def generate_circle(self, radius, center, num_points, max_forward_speed,
                         theta_offset=0.0, heading_offset=0.0, append=False):
         if radius <= 0:
-            print 'Invalid radius, value=', radius
+            print ('Invalid radius, value=', radius)
             return False
 
         if num_points <= 0:
-            print 'Invalid number of samples, value=', num_points
+            print ('Invalid number of samples, value=', num_points)
             return False
 
         if max_forward_speed <= 0:
-            print 'Invalid absolute maximum velocity, value=', max_forward_speed
+            print ('Invalid absolute maximum velocity, value=', max_forward_speed)
             return False
 
         if not append:
@@ -316,19 +316,19 @@ class WaypointSet(object):
                        num_turns, theta_offset=0.0, heading_offset=0.0,
                        append=False):
         if radius <= 0:
-            print 'Invalid radius, value=', radius
+            print ('Invalid radius, value=', radius)
             return False
 
         if num_points <= 0:
-            print 'Invalid number of samples, value=', num_points
+            print ('Invalid number of samples, value=', num_points)
             return False
 
         if num_turns <= 0:
-            print 'Invalid number of turns, value=', num_points
+            print ('Invalid number of turns, value=', num_points)
             return False
 
         if max_forward_speed <= 0:
-            print 'Invalid absolute maximum velocity, value=', max_forward_speed
+            print ('Invalid absolute maximum velocity, value=', max_forward_speed)
             return False
 
         if not append:

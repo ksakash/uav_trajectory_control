@@ -157,8 +157,6 @@ class DPControllerBase(object):
         self._init_odom = False
 
         # Subscribe to odometry topic
-        # self._odom_topic_sub = rospy.Subscriber(
-        #     '/anahita/pose_gt', numpy_msg(Odometry), self._odometry_callback)
         self._odom_topic_sub = rospy.Subscriber(
             'mavros/odometry/in/re', numpy_msg(Odometry), self._odometry_callback)
 
@@ -176,7 +174,7 @@ class DPControllerBase(object):
         """Create instance of a specific DP controller."""
         for controller in DPControllerBase.__subclasses__():
             if name == controller.__name__:
-                print 'Creating controller=', name
+                print ('Creating controller=', name)
                 return controller(*args)
 
     @staticmethod
@@ -266,8 +264,7 @@ class DPControllerBase(object):
             self._reference['rot'] = reference.q
             self._reference['vel'] = np.hstack((reference.v, reference.w))
             self._reference['acc'] = np.hstack((reference.a, reference.alpha))
-            # print '------------------ REFERENCE\n'
-            # print reference
+
         if reference is not None and self._reference_pub.get_num_connections() > 0:
             # Publish current reference
             msg = TrajectoryPoint()
@@ -359,11 +356,6 @@ class DPControllerBase(object):
                 force[i] = -self._control_saturation
             elif force[i] > self._control_saturation:
                 force[i] = self._control_saturation
-
-        # if not self.thrusters_only:
-        #     surge_speed = self._vehicle_model.vel[0]
-        #     self.publish_auv_command(surge_speed, force)
-        #     return
 
         force_msg = WrenchStamped()
         force_msg.header.stamp = rospy.Time.now()

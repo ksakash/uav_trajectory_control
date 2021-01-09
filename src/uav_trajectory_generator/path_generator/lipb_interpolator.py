@@ -19,9 +19,9 @@ import numpy as np
 from uav_waypoints import Waypoint, WaypointSet
 from ..trajectory_point import TrajectoryPoint
 from tf.transformations import quaternion_multiply, quaternion_about_axis
-from line_segment import LineSegment
-from bezier_curve import BezierCurve
-from path_generator import PathGenerator
+from uav_trajectory_generator.path_generator.line_segment import LineSegment
+from uav_trajectory_generator.path_generator.bezier_curve import BezierCurve
+from uav_trajectory_generator.path_generator import PathGenerator
 from visualization_msgs.msg import MarkerArray
 
 

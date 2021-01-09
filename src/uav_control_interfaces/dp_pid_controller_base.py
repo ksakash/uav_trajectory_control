@@ -19,7 +19,7 @@ from uav_trajectory_control.srv import *
 from uav_control_interfaces.dp_controller_base import DPControllerBase
 import tf.transformations as trans
 import math
-from PID import PIDRegulator
+from uav_control_interfaces.PID import PIDRegulator
 
 class DPPIDControllerBase(DPControllerBase):
     """

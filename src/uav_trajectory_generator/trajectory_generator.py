@@ -96,7 +96,6 @@ class TrajectoryGenerator(object):
 
         # try:
         if self.points is None:
-            # print 'madharchod'
             return None
         msg = uav_control_msgs.Trajectory()
         msg.header.stamp = rospy.Time.now()

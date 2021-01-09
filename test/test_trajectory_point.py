@@ -16,7 +16,7 @@
 
 import roslib
 
-PKG = 'uuv_trajectory_control'
+PKG = 'uav_trajectory_control'
 roslib.load_manifest(PKG)
 
 import sys

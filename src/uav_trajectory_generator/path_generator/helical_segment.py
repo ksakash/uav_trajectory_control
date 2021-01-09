@@ -69,7 +69,7 @@ if __name__ == '__main__':
     ax.plot(pnts[:, 0], pnts[:, 1], pnts[:, 2])
     ax.plot([pnts[0, 0]], [pnts[0, 1]], [pnts[0, 2]], '.r')
 
-    print 1, helix.get_pitch() * 180 / np.pi
+    print (1, helix.get_pitch() * 180 / np.pi)
     ######################################################
     ax = fig.add_subplot(222, projection='3d')
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     ax.plot(pnts[:, 0], pnts[:, 1], pnts[:, 2])
     ax.plot([pnts[0, 0]], [pnts[0, 1]], [pnts[0, 2]], '.r')
 
-    print 2, helix.get_pitch() * 180 / np.pi
+    print (2, helix.get_pitch() * 180 / np.pi)
     ######################################################
     ax = fig.add_subplot(223, projection='3d')
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     ax.plot(pnts[:, 0], pnts[:, 1], pnts[:, 2])
     ax.plot([pnts[0, 0]], [pnts[0, 1]], [pnts[0, 2]], '.r')
 
-    print 3, helix.get_pitch() * 180 / np.pi
+    print (3, helix.get_pitch() * 180 / np.pi)
     ######################################################
     ax = fig.add_subplot(224, projection='3d')
 
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     ax.plot(pnts[:, 0], pnts[:, 1], pnts[:, 2])
     ax.plot([pnts[0, 0]], [pnts[0, 1]], [pnts[0, 2]], '.r')
 
-    print 4, helix.get_pitch() * 180 / np.pi
+    print (4, helix.get_pitch() * 180 / np.pi)
     plt.show()

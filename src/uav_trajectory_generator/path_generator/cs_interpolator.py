@@ -19,9 +19,9 @@ from copy import deepcopy
 from uav_waypoints import Waypoint, WaypointSet
 from ..trajectory_point import TrajectoryPoint
 from tf.transformations import quaternion_multiply, quaternion_about_axis, quaternion_conjugate, quaternion_from_matrix, euler_from_matrix
-from line_segment import LineSegment
-from bezier_curve import BezierCurve
-from path_generator import PathGenerator
+from uav_trajectory_generator.path_generator.line_segment import LineSegment
+from uav_trajectory_generator.path_generator.bezier_curve import BezierCurve
+from uav_trajectory_generator.path_generator import PathGenerator
 from visualization_msgs.msg import MarkerArray
 
 
@@ -90,10 +90,8 @@ class CSInterpolator(PathGenerator):
 
     def get_samples(self, max_time, step=0.001):
         if self._waypoints is None:
-            print 'aise kaise betichod'
             return None
         if self._interp_fcns['pos'] is None:
-            print 'harami'
             return None
         s = np.arange(0, 1 + step, step)
 

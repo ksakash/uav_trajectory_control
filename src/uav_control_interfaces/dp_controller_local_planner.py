@@ -92,7 +92,7 @@ class DPControllerLocalPlanner(object):
             tf_trans_ned_to_enu = tf_buffer.lookup_transform(
                 'world', 'world_ned', rospy.Time(),
                 rospy.Duration(10))
-        except Exception, e:
+        except Exception as e:
             tf_trans_ned_to_enu = None
             self._logger.error('No transform found between world and the '
                                'inertial_frame_id provided ' +
@@ -185,8 +185,6 @@ class DPControllerLocalPlanner(object):
         self._input_trajectory_sub = rospy.Subscriber(
             'input_trajectory', Trajectory, self._update_trajectory_from_msg)
 
-        # self._odom_sub = rospy.Subscriber(
-        #     '/anahita/pose_gt', numpy_msg(Odometry), self._odomCB)
         self._odom_sub = rospy.Subscriber(
             'mavros/odometry/in/re', numpy_msg(Odometry), self._odomCB)
 
@@ -260,7 +258,7 @@ class DPControllerLocalPlanner(object):
         return output
 
     def _transform_waypoint_set(self, waypoint_set):
-        output = uuv_waypoints.WaypointSet(
+        output = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
         for i in range(waypoint_set.num_waypoints):
             wp = self._transform_waypoint(waypoint_set.get_waypoint(i))
@@ -268,7 +266,7 @@ class DPControllerLocalPlanner(object):
         return output
 
     def _apply_workspace_constraints(self, waypoint_set):
-        wp_set = uuv_waypoints.WaypointSet(
+        wp_set = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
         for i in range(waypoint_set.num_waypoints):
             wp = waypoint_set.get_waypoint(i)
@@ -369,12 +367,12 @@ class DPControllerLocalPlanner(object):
             vel = np.dot(self._vehicle_pose.rot_matrix, vel)
 
             # Compute pose step
-            step = uuv_trajectory_generator.TrajectoryPoint()
+            step = uav_trajectory_generator.TrajectoryPoint()
             step.pos = np.dot(self._vehicle_pose.rot_matrix, vel * self._dt)
             step.rotq = quaternion_about_axis(self._teleop_vel_ref.angular.z * self._dt, [0, 0, 1])
 
             # Compute new reference
-            ref_pnt = uuv_trajectory_generator.TrajectoryPoint()
+            ref_pnt = uav_trajectory_generator.TrajectoryPoint()
             ref_pnt.pos = self._vehicle_pose.pos + step.pos
 
             ref_pnt.rotq = quaternion_multiply(self.get_vehicle_rot(), step.rotq)
@@ -407,7 +405,7 @@ class DPControllerLocalPlanner(object):
         heading = euler_from_quaternion(self.get_vehicle_rot())[2]
 
         if self._thrusters_only:
-            init_wp = uuv_waypoints.Waypoint(
+            init_wp = uav_waypoints.Waypoint(
                 x=self._vehicle_pose.pos[0],
                 y=self._vehicle_pose.pos[1],
                 z=self._vehicle_pose.pos[2],
@@ -415,7 +413,7 @@ class DPControllerLocalPlanner(object):
                 heading_offset=self._traj_interpolator.get_waypoints().get_waypoint(0).heading_offset)
         else:
             max_speed = self._traj_interpolator.get_waypoints().get_waypoint(0).max_forward_speed
-            init_wp = uuv_waypoints.Waypoint(
+            init_wp = uav_waypoints.Waypoint(
                 x=self._vehicle_pose.pos[0],# + max_speed / self._look_ahead_delay * np.cos(heading),
                 y=self._vehicle_pose.pos[1],# + max_speed / self._look_ahead_delay * np.sin(heading),
                 z=self._vehicle_pose.pos[2],
@@ -432,7 +430,7 @@ class DPControllerLocalPlanner(object):
         steps = int(np.floor(first_wp.dist(init_wp.pos)) / 10)
         if steps > 0 and self._traj_interpolator.get_interp_method() != 'dubins':
             for i in range(1, steps):
-                wp = uuv_waypoints.Waypoint(
+                wp = uav_waypoints.Waypoint(
                     x=first_wp.x - i * dx / steps,
                     y=first_wp.y - i * dy / steps,
                     z=first_wp.z - i * dz / steps,
@@ -504,7 +502,7 @@ class DPControllerLocalPlanner(object):
 
     def update_vehicle_pose(self, pos, quat):
         if self._vehicle_pose is None:
-            self._vehicle_pose = uuv_trajectory_generator.TrajectoryPoint()
+            self._vehicle_pose = uav_trajectory_generator.TrajectoryPoint()
         self._vehicle_pose.pos = pos
         self._vehicle_pose.rotq = quat
         self._vehicle_pose.t = rospy.get_time()
@@ -562,7 +560,7 @@ class DPControllerLocalPlanner(object):
         print ('Got a pose target for the Anahita')
         print (request.target_pose)
 
-        self._this_ref_pnt = uuv_trajectory_generator.TrajectoryPoint()
+        self._this_ref_pnt = uav_trajectory_generator.TrajectoryPoint()
         self._this_ref_pnt.pos = np.array([request.target_pose.position.x,
                                            request.target_pose.position.y,
                                            request.target_pose.position.z])
@@ -664,7 +662,7 @@ class DPControllerLocalPlanner(object):
             self._logger.info('Start waypoint trajectory now!')
         self._lock.acquire()
         # Create a waypoint set
-        wp_set = uuv_waypoints.WaypointSet(
+        wp_set = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
         # Create a waypoint set message, to fill wp_set
         waypointset_msg = WaypointSet()
@@ -679,7 +677,7 @@ class DPControllerLocalPlanner(object):
         wp_set = self._transform_waypoint_set(wp_set)
         wp_set = self._apply_workspace_constraints(wp_set)
 
-        wp = uuv_waypoints.Waypoint()
+        wp = uav_waypoints.Waypoint()
         wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
         self._wp_end.x = wp.x
         self._wp_end.y = wp.y
@@ -722,7 +720,7 @@ class DPControllerLocalPlanner(object):
             self._logger.error('The trajectory starts in the past, correct the starting time!')
             return InitCircularTrajectoryResponse(False)
         try:
-            wp_set = uuv_waypoints.WaypointSet(
+            wp_set = uav_waypoints.WaypointSet(
                 inertial_frame_id=self.inertial_frame_id)
             success = wp_set.generate_circle(radius=request.radius,
                                              center=request.center,
@@ -735,7 +733,7 @@ class DPControllerLocalPlanner(object):
                 return InitCircularTrajectoryResponse(False)
             wp_set = self._apply_workspace_constraints(wp_set)
 
-            wp = uuv_waypoints.Waypoint()
+            wp = uav_waypoints.Waypoint()
             wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
             self._wp_end.x = wp.x
             self._wp_end.y = wp.y
@@ -783,7 +781,7 @@ class DPControllerLocalPlanner(object):
             self._logger.info('============================')
             self._lock.release()
             return InitCircularTrajectoryResponse(True)
-        except Exception, e:
+        except Exception as e:
             self._logger.error('Error while setting circular trajectory, msg=' + str(e))
             self.set_station_keeping(True)
             self.set_automatic_mode(False)
@@ -804,7 +802,7 @@ class DPControllerLocalPlanner(object):
             self._logger.info('Start helical trajectory now!')
 
         try:
-            wp_set = uuv_waypoints.WaypointSet(inertial_frame_id=self.inertial_frame_id)
+            wp_set = uav_waypoints.WaypointSet(inertial_frame_id=self.inertial_frame_id)
             success = wp_set.generate_helix(radius=request.radius,
                                             center=request.center,
                                             num_points=request.n_points,
@@ -819,7 +817,7 @@ class DPControllerLocalPlanner(object):
                 return InitHelicalTrajectoryResponse(False)
             wp_set = self._apply_workspace_constraints(wp_set)
 
-            wp = uuv_waypoints.Waypoint()
+            wp = uav_waypoints.Waypoint()
             wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
             self._wp_end.x = wp.x
             self._wp_end.y = wp.y
@@ -871,7 +869,7 @@ class DPControllerLocalPlanner(object):
             self._logger.info('============================')
             self._lock.release()
             return InitHelicalTrajectoryResponse(True)
-        except Exception, e:
+        except Exception as e:
             self._logger.error('Error while setting helical trajectory, msg=' + str(e))
             self.set_station_keeping(True)
             self.set_automatic_mode(False)
@@ -894,14 +892,14 @@ class DPControllerLocalPlanner(object):
         self.set_station_keeping(True)
         self._traj_interpolator.set_interp_method(request.interpolator.data)
 
-        wp_set = uuv_waypoints.WaypointSet()
+        wp_set = uav_waypoints.WaypointSet()
         if not wp_set.read_from_file(request.filename.data):
             self._logger.info('Error occurred while parsing waypoint file')
             return InitWaypointsFromFileResponse(False)
         wp_set = self._transform_waypoint_set(wp_set)
         wp_set = self._apply_workspace_constraints(wp_set)
 
-        wp = uuv_waypoints.Waypoint()
+        wp = uav_waypoints.Waypoint()
         wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
         self._wp_end.x = wp.x
         self._wp_end.y = wp.y
@@ -944,10 +942,10 @@ class DPControllerLocalPlanner(object):
             return GoToResponse(False)
         self.set_station_keeping(True)
         self._lock.acquire()
-        wp_set = uuv_waypoints.WaypointSet(
+        wp_set = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
 
-        init_wp = uuv_waypoints.Waypoint(
+        init_wp = uav_waypoints.Waypoint(
             x=self._vehicle_pose.pos[0],
             y=self._vehicle_pose.pos[1],
             z=self._vehicle_pose.pos[2],
@@ -958,7 +956,7 @@ class DPControllerLocalPlanner(object):
         wp_set.add_waypoint(init_wp)
         wp_set.add_waypoint_from_msg(request.waypoint)
 
-        wp = uuv_waypoints.Waypoint()
+        wp = uav_waypoints.Waypoint()
         wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
         self._wp_end.x = wp.x
         self._wp_end.y = wp.y
@@ -1008,9 +1006,9 @@ class DPControllerLocalPlanner(object):
 
         self._lock.acquire()
         self.set_station_keeping(True)
-        wp_set = uuv_waypoints.WaypointSet(
+        wp_set = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
-        init_wp = uuv_waypoints.Waypoint(
+        init_wp = uav_waypoints.Waypoint(
             x=self._vehicle_pose.pos[0],
             y=self._vehicle_pose.pos[1],
             z=self._vehicle_pose.pos[2],
@@ -1019,7 +1017,7 @@ class DPControllerLocalPlanner(object):
             inertial_frame_id=self.inertial_frame_id)
         wp_set.add_waypoint(init_wp)
 
-        wp = uuv_waypoints.Waypoint(
+        wp = uav_waypoints.Waypoint(
             x=self._vehicle_pose.pos[0] + request.step.x,
             y=self._vehicle_pose.pos[1] + request.step.y,
             z=self._vehicle_pose.pos[2] + request.step.z,
@@ -1027,7 +1025,7 @@ class DPControllerLocalPlanner(object):
             inertial_frame_id=self.inertial_frame_id)
         wp_set.add_waypoint(wp)
 
-        wp = uuv_waypoints.Waypoint()
+        wp = uav_waypoints.Waypoint()
         wp = wp_set.get_waypoint(wp_set.num_waypoints - 1)
         self._wp_end.x = wp.x
         self._wp_end.y = wp.y
@@ -1084,11 +1082,11 @@ class DPControllerLocalPlanner(object):
         vec /= np.linalg.norm(vec)
         u_init = u(np.arctan2(vec[1], vec[0]))
 
-        wp_set = uuv_waypoints.WaypointSet(
+        wp_set = uav_waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
 
         for i in np.linspace(u_init, u_init + 1, n_points):
-            wp = uuv_waypoints.Waypoint(
+            wp = uav_waypoints.Waypoint(
                 x=self._idle_circle_center[0] + radius * np.cos(phi(i)),
                 y=self._idle_circle_center[1] + radius * np.sin(phi(i)),
                 z=self._idle_z,

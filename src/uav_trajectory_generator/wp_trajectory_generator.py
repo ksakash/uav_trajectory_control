@@ -20,7 +20,7 @@ from uav_waypoints import Waypoint
 from uav_waypoints import WaypointSet
 from tf.transformations import quaternion_multiply, quaternion_inverse, \
     quaternion_conjugate, quaternion_about_axis
-from path_generator import PathGenerator
+from uav_trajectory_generator.path_generator import PathGenerator
 import logging
 import sys
 import time
@@ -223,7 +223,7 @@ class WPTrajectoryGenerator(object):
             self._last_t = t
             self._dt = 0.0
             if self.interpolator.start_time is None:
-                print "from update dt, start_time is None"
+                print ("from update dt, start_time is None")
                 self.interpolator.start_time = t
             return False
         self._dt = t - self._last_t
@@ -334,7 +334,7 @@ class WPTrajectoryGenerator(object):
             *args
             )
 
-        if self.get_interpolation_method() is not 'los':
+        if self.get_interpolation_method() != 'los':
             if self._use_finite_diff:
                 # Set linear velocity
                 pnt.vel = self._generate_vel(cur_s)
@@ -410,7 +410,7 @@ class WPTrajectoryGenerator(object):
                 self._logger.error('Error initializing the waypoint interpolator')
                 return None
             if self.interpolator.start_time is None:
-                print "start time if None"
+                print ("start time if None")
                 self.set_start_time(t + (time.time() - tic))
             self.interpolator.s_step = self._t_step / (self.interpolator.max_time - self.interpolator.start_time)
             self.update_dt(t)

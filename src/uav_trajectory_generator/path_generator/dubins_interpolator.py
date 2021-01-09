@@ -15,13 +15,13 @@
 
 import numpy as np
 from uav_waypoints import Waypoint, WaypointSet
-from helical_segment import HelicalSegment
-from bezier_curve import BezierCurve
-from path_generator import PathGenerator
+from uav_trajectory_generator.path_generator.helical_segment import HelicalSegment
+from uav_trajectory_generator.path_generator.bezier_curve import BezierCurve
+from uav_trajectory_generator.path_generator import PathGenerator
 from copy import deepcopy
 from ..trajectory_point import TrajectoryPoint
 from tf.transformations import quaternion_multiply, quaternion_about_axis, quaternion_conjugate, quaternion_from_matrix, euler_from_matrix
-from line_segment import LineSegment
+from uav_trajectory_generator.path_generator.line_segment import LineSegment
 
 from visualization_msgs.msg import MarkerArray, Marker
 from geometry_msgs.msg import Point
@@ -45,7 +45,7 @@ class DubinsInterpolator(PathGenerator):
             return False
 
         if self._waypoints.num_waypoints < 2:
-            print 'At least 2 waypoints are necessary'
+            print ('At least 2 waypoints are necessary')
             return False
 
         self._markers_msg = MarkerArray()
