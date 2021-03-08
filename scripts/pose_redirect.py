@@ -15,13 +15,14 @@ import tf.transformations as trans
 
 odo_pub = rospy.Publisher('mavros/odometry/in/re', Odometry, queue_size=10, latch=True)
 
-def odometry_callback (msg):
-    msg_ = msg
+def pose_callback (msg):
+    msg_ = Odometry ()
+    msg_.pose.pose = msg.pose
     msg_.header.frame_id = "world"
     odo_pub.publish (msg_)
 
 if __name__ == '__main__':
     rospy.init_node('odom_redirect')
-    sub_odometry = rospy.Subscriber('mavros/odometry/in',
-                                    numpy_msg(Odometry), odometry_callback)
+    sub_odometry = rospy.Subscriber('mavros/local_position/pose',
+                                    PoseStamped, pose_callback)
     rospy.spin ()

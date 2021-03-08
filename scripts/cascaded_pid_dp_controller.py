@@ -51,10 +51,10 @@ class ROV_CascadedController(DPControllerBase):
         cmd_pose.position.x = self._reference['pos'][0]
         cmd_pose.position.y = self._reference['pos'][1]
         cmd_pose.position.z = self._reference['pos'][2]
-        cmd_pose.orientation.x = self._reference['rot'][0]
-        cmd_pose.orientation.y = self._reference['rot'][1]
-        cmd_pose.orientation.z = self._reference['rot'][2]
-        cmd_pose.orientation.w = self._reference['rot'][3]
+        cmd_pose.orientation.x = 0 # self._reference['rot'][0]
+        cmd_pose.orientation.y = 0 # self._reference['rot'][1]
+        cmd_pose.orientation.z = 0 # self._reference['rot'][2]
+        cmd_pose.orientation.w = 1 # self._reference['rot'][3]
 
         msg = PoseStamped ()
         msg.pose = cmd_pose

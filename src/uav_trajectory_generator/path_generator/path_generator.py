@@ -123,7 +123,6 @@ class PathGenerator(object):
 
     @s_step.setter
     def s_step(self, step):
-        print ("step", step)
         assert 0 < step < 1
         self._s_step = step
 
