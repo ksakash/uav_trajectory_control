@@ -14,7 +14,7 @@ from std_msgs.msg import Float64, String
 from controls_pkg.msg import *
 from controls_pkg.srv import *
 
-from uav_trajectory_control.msg  import *
+from uav_trajectory_control.msg import *
 from uav_trajectory_control.srv import *
 
 rospy.init_node ('offboard_control_ardupilot')
@@ -97,7 +97,7 @@ else:
     print ("failed takeoff!")
 
 print ("reading input..")
-filename = "waypoints_2"
+filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/waypoints_2"
 waypoints = process_input (filename)
 interpolator = String ()
 interpolator.data = "cubic"
