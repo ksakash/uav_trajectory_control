@@ -18,6 +18,14 @@
 
   <group ns="/">
     <node pkg="uav_trajectory_control"
+      type="pose_redirect.py"
+      name="pose_redirect"
+      output="screen" />
+    <node pkg="uav_trajectory_control"
+      type="offboard_ard_mission.py"
+      name="offboard_ard_mission"
+      output="screen" />
+    <node pkg="uav_trajectory_control"
       type="cascaded_pid_dp_controller.py"
       name="cascaded_pid_dp_controller"
       output="screen"
@@ -31,14 +39,6 @@
       <remap from="reference" to="dp_controller/reference"/>
       <remap from="thruster_output" to="thruster_manager/input_stamped"/>
     </node>
-    <node pkg="uav_trajectory_control"
-      type="pose_redirect.py"
-      name="pose_redirect"
-      output="screen" />
-    <node pkg="uav_trajectory_control"
-      type="offboard_ard_mission.py"
-      name="offboard_ard_mission"
-      output="screen" />
   </group>
 
 </launch>

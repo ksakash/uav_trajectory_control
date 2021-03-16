@@ -44,7 +44,7 @@ def process_input (filename):
         wp.point.x = x
         wp.point.y = y
         wp.point.z = z
-        wp.max_forward_speed = 0.5
+        wp.max_forward_speed = 1
 
         plan.append (wp)
 
@@ -89,12 +89,14 @@ else:
     sys.exit (-1)
 
 takeoff_client = rospy.ServiceProxy ("mavros/cmd/takeoff", CommandTOL)
-takeoff_res = takeoff_client (altitude=1.5)
+takeoff_res = takeoff_client (altitude=3)
 
 if takeoff_res.success:
     print ("takeoff sent", takeoff_res.success)
 else:
     print ("failed takeoff!")
+
+time.sleep (20)
 
 print ("reading input..")
 filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/waypoints_2"
