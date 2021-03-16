@@ -117,12 +117,19 @@ else:
     print ("error sending the waypoint list")
     sys.exit (-1)
 
+rospy.wait_for_service ('/trajectory_complete')
+
+trajectory_complete_client = rospy.ServiceProxy ('/trajectory_complete', TrajectoryComplete)
+
 while not rospy.is_shutdown ():
+    res = trajectory_complete_client (time_out=0)
+    if res.success:
+        break
     rate.sleep ()
 
 print ("completed the mission!!")
 
-rtl = False
+rtl = True
 
 if rtl:
     print ("RTL mode ...")

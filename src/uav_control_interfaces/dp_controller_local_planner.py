@@ -208,6 +208,7 @@ class DPControllerLocalPlanner(object):
         self._stamp_trajectory_received = 0.0
         self._station_keeping_ref = None
         self._stall_vehicle_on = False
+        self._trajectory_complete = False
         # Dictionary of services
         self._services = dict()
         self._services['hold_vehicle'] = rospy.Service(
@@ -618,32 +619,10 @@ class DPControllerLocalPlanner(object):
             rospy.sleep(0.05)
 
     def is_trajectory_complete(self, request):
-
-        start = rospy.get_time()
-        count = 0
-        then = rospy.get_time()
-
-        while not rospy.is_shutdown():
-            if (self.has_finished()):
-                if (not count):
-                    then = rospy.get_time()
-                count = count + 1
-            now = rospy.get_time()
-            diff = now - then
-
-            if (diff >= 3):
-                if (count >= 50):
-                    rospy.loginfo ("Trajectory Completed!!")
-                    self.set_station_keeping(True)
-                    self.set_automatic_mode(False)
-                    return TrajectoryCompleteResponse(True)
-                else:
-                    count = 0
-
-            if (now - start > request.time_out):
-               return TrajectoryCompleteResponse(False)
-
-            rospy.sleep(0.05)
+        if self._trajectory_complete:
+            return TrajectoryCompleteResponse (True)
+        else:
+            return TrajectoryCompleteResponse (False)
 
     def start_waypoint_list(self, request):
         """
@@ -686,6 +665,7 @@ class DPControllerLocalPlanner(object):
         self._logger.info("Trajectory's end point: %f, %f, %f", self._wp_end.x, self._wp_end.y, self._wp_end.z)
 
         if self._traj_interpolator.set_waypoints(wp_set, self.get_vehicle_rot()):
+            self._trajectory_complete = False
             self._station_keeping_center = None
             self._traj_interpolator.set_start_time((t.to_sec() if not request.start_now else rospy.get_time()))
             self._update_trajectory_info()
@@ -1127,6 +1107,7 @@ class DPControllerLocalPlanner(object):
 
             if self._traj_running and (self.has_finished() or self._station_keeping_on):
                 # Trajectory ended, start station keeping mode
+                self._trajectory_complete = True
                 self._logger.info(rospy.get_namespace() + ' - Trajectory completed!')
                 if self._this_ref_pnt is None:
                     # TODO Fix None value coming from the odometry
