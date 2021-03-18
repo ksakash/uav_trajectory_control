@@ -24,6 +24,9 @@ local_pos_pub = rospy.Publisher("mavros/setpoint_position/local", PoseStamped, q
 current_state = State ()
 curr_pose = PoseStamped ()
 
+start_x = rospy.get_param ("x", 0)
+start_y = rospy.get_param ("y", 0)
+
 def state_cb (data):
     global current_state
     current_state = data
@@ -33,6 +36,7 @@ def pose_cb (data):
     curr_pose = data
 
 def process_input (filename):
+    global start_x, start_y
     f = open (filename, 'r')
     lines = f.readlines()
     f.close ()
@@ -41,8 +45,8 @@ def process_input (filename):
     for line in lines:
         (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), 10) # int (line.split(' ')[2]))
         wp = Waypoint ()
-        wp.point.x = x
-        wp.point.y = y
+        wp.point.x = x - start_x
+        wp.point.y = y - start_y
         wp.point.z = z
         wp.max_forward_speed = 1
 
