@@ -39,7 +39,7 @@ def process_input (filename):
     plan = []
 
     for line in lines:
-        (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), int (line.split(' ')[2]))
+        (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), 10) # int (line.split(' ')[2]))
         wp = Waypoint ()
         wp.point.x = x
         wp.point.y = y
@@ -53,73 +53,76 @@ def process_input (filename):
 state_sub = rospy.Subscriber("mavros/state", State, state_cb)
 pose_sub = rospy.Subscriber("mavros/local_position/pose", PoseStamped, pose_cb)
 
-print ("INTIALIZING...")
+id = rospy.get_param ("id", 0)
+uav_name = "UAV" + str (id)
+
+print (uav_name, ": INTIALIZING UAV ...")
 time.sleep (1)
 
 while(not rospy.is_shutdown () and not current_state.connected):
-    print ("waiting for the state to be connected")
+    print (uav_name, ": waiting for the state to be connected")
     rate.sleep()
 
 rospy.wait_for_service ('mavros/set_mode')
-print ("mavros/set_mode service is active...")
+print (uav_name, ": mavros/set_mode service is active...")
 
 set_mode_client = rospy.ServiceProxy ("mavros/set_mode", SetMode)
 mode_res = set_mode_client (custom_mode="GUIDED")
 
 if mode_res.mode_sent:
-    print ("guided mode sent", mode_res.mode_sent)
+    print (uav_name, ": guided mode sent", mode_res.mode_sent)
 else:
-    print ("failed guided mode!")
+    print (uav_name, ": failed guided mode!")
     sys.exit (-1)
 
 while (current_state.mode != 'GUIDED' and not rospy.is_shutdown ()):
-    print ("current state mode:", current_state.mode)
+    print (uav_name, ": current state mode:", current_state.mode)
     time.sleep (0.01)
 
 rospy.wait_for_service ('mavros/cmd/arming')
-print ("mavros/cmd/arming service is active...")
+print (uav_name, ": mavros/cmd/arming service is active...")
 
 arming_client = rospy.ServiceProxy ("mavros/cmd/arming", CommandBool)
 
 arm_res = arming_client (value=True)
 if arm_res.success:
-    print ("ARM sent", arm_res.success)
+    print (uav_name, ": ARM sent", arm_res.success)
 else:
-    print ("Failed Arming!")
+    print (uav_name, ": Failed Arming!")
     sys.exit (-1)
 
 takeoff_client = rospy.ServiceProxy ("mavros/cmd/takeoff", CommandTOL)
 takeoff_res = takeoff_client (altitude=3)
 
 if takeoff_res.success:
-    print ("takeoff sent", takeoff_res.success)
+    print (uav_name, ": takeoff sent", takeoff_res.success)
 else:
-    print ("failed takeoff!")
+    print (uav_name, ": failed takeoff!")
 
 time.sleep (20)
 
-print ("reading input..")
-filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/waypoints_2"
+print (uav_name, ": reading input..")
+filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/waypoints_" + str (id)
 waypoints = process_input (filename)
 interpolator = String ()
 interpolator.data = "cubic"
 
-rospy.wait_for_service ('/start_waypoint_list')
+rospy.wait_for_service ('start_waypoint_list')
 
-print ("starting the mission..")
+print (uav_name, ": starting the mission..")
 
-waypoint_set_client = rospy.ServiceProxy ('/start_waypoint_list', InitWaypointSet)
+waypoint_set_client = rospy.ServiceProxy ('start_waypoint_list', InitWaypointSet)
 waypoint_set_res = waypoint_set_client (start_now=True, waypoints=waypoints, \
                                         max_forward_speed=0.5, interpolator=interpolator)
 if waypoint_set_res.success:
-    print ("waypoint list sent")
+    print (uav_name, ": waypoint list sent")
 else:
-    print ("error sending the waypoint list")
+    print (uav_name, ": error sending the waypoint list")
     sys.exit (-1)
 
-rospy.wait_for_service ('/trajectory_complete')
+rospy.wait_for_service ('trajectory_complete')
 
-trajectory_complete_client = rospy.ServiceProxy ('/trajectory_complete', TrajectoryComplete)
+trajectory_complete_client = rospy.ServiceProxy ('trajectory_complete', TrajectoryComplete)
 
 while not rospy.is_shutdown ():
     res = trajectory_complete_client (time_out=0)
@@ -127,26 +130,26 @@ while not rospy.is_shutdown ():
         break
     rate.sleep ()
 
-print ("completed the mission!!")
+print (uav_name, ": completed the mission!!")
 
 rtl = True
 
 if rtl:
-    print ("RTL mode ...")
+    print (uav_name, ": RTL mode ...")
     mode_res = set_mode_client (custom_mode="RTL")
 
     if mode_res.mode_sent:
-        print ("RTL mode sent", mode_res.mode_sent)
+        print (uav_name, ": RTL mode sent", mode_res.mode_sent)
     else:
-        print ("failed RTL mode!")
+        print (uav_name, ": failed RTL mode!")
         sys.exit (-1)
 else:
     land_client = rospy.ServiceProxy ("mavros/cmd/land", CommandTOL)
     land_res = land_client ()
 
     if land_res.success:
-        print ("land sent", land_res.success)
+        print (uav_name, ": land sent", land_res.success)
     else:
-        print ("landing failed!")
+        print (uav_name, ": landing failed!")
         sys.exit (-1)
 
