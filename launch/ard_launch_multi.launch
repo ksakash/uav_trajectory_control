@@ -18,8 +18,8 @@
 
   <group ns="uav0">
     <param name="id" type="int" value="0" />
-    <param name="x" type="float" value="0" />
-    <param name="y" type="float" value="0" />
+    <param name="x" type="double" value="0" />
+    <param name="y" type="double" value="0" />
     <node pkg="uav_trajectory_control"
       type="pose_redirect.py"
       name="pose_redirect"
@@ -45,8 +45,8 @@
 
   <group ns="uav1">
     <param name="id" type="int" value="1" />
-    <param name="x" type="float" value="0" />
-    <param name="y" type="float" value="0" />
+    <param name="x" type="double" value="0" />
+    <param name="y" type="double" value="0" />
     <node pkg="uav_trajectory_control"
       type="pose_redirect.py"
       name="pose_redirect"

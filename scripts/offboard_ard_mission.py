@@ -26,6 +26,7 @@ curr_pose = PoseStamped ()
 
 start_x = rospy.get_param ("x", 0)
 start_y = rospy.get_param ("y", 0)
+height = 3
 
 def state_cb (data):
     global current_state
@@ -36,14 +37,14 @@ def pose_cb (data):
     curr_pose = data
 
 def process_input (filename):
-    global start_x, start_y
+    global start_x, start_y, height
     f = open (filename, 'r')
     lines = f.readlines()
     f.close ()
     plan = []
 
     for line in lines:
-        (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), 10) # int (line.split(' ')[2]))
+        (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), height) # int (line.split(' ')[2]))
         wp = Waypoint ()
         wp.point.x = x - start_x
         wp.point.y = y - start_y
@@ -106,7 +107,7 @@ else:
 time.sleep (20)
 
 print (uav_name, ": reading input..")
-filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/waypoints_" + str (id)
+filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/temp_" + str (id)
 waypoints = process_input (filename)
 interpolator = String ()
 interpolator.data = "cubic"

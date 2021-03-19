@@ -1,0 +1,37 @@
+<launch>
+  <!-- Vehicle namespace -->
+  <arg name="uuv_name" default="uav0"/>
+  <!-- Name of the vehicle model -->
+  <arg name="model_name" default="$(arg uuv_name)"/>
+  <!-- Thruster saturation -->
+  <arg name="saturation" default="1200"/>
+  <!-- Flag to start the trajectory visual markers publisher -->
+  <arg name="gui_on" default="true"/>
+  <!-- Flag set as true to use load controller the parameters from the file  -->
+  <arg name="use_params_file" default="false"/>
+  <!--
+    Set this flag to true to compute both reference and error vectors wrt
+    world_ned frame
+  -->
+  <arg name="use_ned_frame" default="false"/>
+  <param name="use_cascaded_pid" value="true" type="bool"/>
+
+  <group ns="uav0">
+    <param name="id" type="int" value="0" />
+    <param name="takeoff_height" type="double" value="3" />
+    <node pkg="uav_trajectory_control"
+      type="takeoff_test.py"
+      name="takeoff_test"
+      output="screen" />
+  </group>
+
+  <group ns="uav1">
+    <param name="id" type="int" value="1" />
+    <param name="takeoff_height" type="double" value="10" />
+    <node pkg="uav_trajectory_control"
+      type="takeoff_test.py"
+      name="takeoff_test"
+      output="screen" />
+  </group>
+
+</launch>
