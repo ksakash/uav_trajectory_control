@@ -26,7 +26,7 @@ curr_pose = PoseStamped ()
 
 start_x = rospy.get_param ("x", 0)
 start_y = rospy.get_param ("y", 0)
-height = 3
+height = 20 # for the waypoints not for the takeoff
 
 def state_cb (data):
     global current_state
@@ -42,14 +42,15 @@ def process_input (filename):
     lines = f.readlines()
     f.close ()
     plan = []
+    unit_length = 5
 
     for line in lines:
         (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), height) # int (line.split(' ')[2]))
         wp = Waypoint ()
-        wp.point.x = x - start_x
-        wp.point.y = y - start_y
+        wp.point.x = (x - start_x) * unit_length
+        wp.point.y = (y - start_y) * unit_length
         wp.point.z = z
-        wp.max_forward_speed = 1
+        wp.max_forward_speed = 5
 
         plan.append (wp)
 
@@ -58,7 +59,7 @@ def process_input (filename):
 state_sub = rospy.Subscriber("mavros/state", State, state_cb)
 pose_sub = rospy.Subscriber("mavros/local_position/pose", PoseStamped, pose_cb)
 
-id = rospy.get_param ("id", 0)
+id = rospy.get_param ("id", 1)
 uav_name = "UAV" + str (id)
 
 print (uav_name, ": INTIALIZING UAV ...")
@@ -107,10 +108,11 @@ else:
 time.sleep (20)
 
 print (uav_name, ": reading input..")
-filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/temp_" + str (id)
+file = 'plan'
+filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/" + file + "_" + str (id)
 waypoints = process_input (filename)
 interpolator = String ()
-interpolator.data = "cubic"
+interpolator.data = "linear"
 
 rospy.wait_for_service ('start_waypoint_list')
 
