@@ -1,0 +1,12 @@
+<launch>
+  <group ns="/">
+    <node pkg="uav_trajectory_control"
+      type="local_planner.py"
+      name="local_planner"
+      output="screen" />
+    <node pkg="uav_trajectory_control"
+      type="offboard_ard_mission.py"
+      name="offboard_ard_mission"
+      output="screen" />
+  </group>
+</launch>
