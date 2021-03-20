@@ -59,7 +59,7 @@ def process_input (filename):
 state_sub = rospy.Subscriber("mavros/state", State, state_cb)
 pose_sub = rospy.Subscriber("mavros/local_position/pose", PoseStamped, pose_cb)
 
-id = rospy.get_param ("id", 1)
+id = rospy.get_param ("id", 0)
 uav_name = "UAV" + str (id)
 
 print (uav_name, ": INTIALIZING UAV ...")
@@ -105,7 +105,7 @@ if takeoff_res.success:
 else:
     print (uav_name, ": failed takeoff!")
 
-time.sleep (20)
+time.sleep (5)
 
 print (uav_name, ": reading input..")
 file = 'plan'
