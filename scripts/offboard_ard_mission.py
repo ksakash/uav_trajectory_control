@@ -109,7 +109,7 @@ time.sleep (20)
 
 print (uav_name, ": reading input..")
 file = 'plan'
-filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/scripts/" + file + "_" + str (id)
+filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/" + file + "_" + str (id)
 waypoints = process_input (filename)
 interpolator = String ()
 interpolator.data = "linear"
