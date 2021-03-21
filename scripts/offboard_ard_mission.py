@@ -139,7 +139,7 @@ while not rospy.is_shutdown ():
 
 print (uav_name, ": completed the mission!!")
 
-rtl = True
+rtl = False
 
 if rtl:
     print (uav_name, ": RTL mode ...")
