@@ -111,7 +111,7 @@ def run_generator(waypoint_set, interp_method):
 if __name__ == '__main__':
     wp_set = uav_waypoints.WaypointSet()
     speed = 0.1
-    filename = '/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/plan_0'
+    filename = '/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/long_0'
     f = open (filename, 'r')
     lines = f.readlines()
     f.close ()
@@ -121,9 +121,8 @@ if __name__ == '__main__':
         (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), height)
         wp_set.add_waypoint (uav_waypoints.Waypoint (x, y, z, speed))
 
-    print (wp_set)
-    run_generator(wp_set, 'cubic_interpolator')
-    run_generator(wp_set, 'linear_interpolator')
+    run_generator(wp_set, 'cubic')
+    # run_generator(wp_set, 'linear')
 
     plt.show()
 

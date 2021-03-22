@@ -108,11 +108,12 @@ else:
 time.sleep (5)
 
 print (uav_name, ": reading input..")
-file = 'plan'
+file = 'long'
 filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/" + file + "_" + str (id)
 waypoints = process_input (filename)
+print ("length of plan:", len (waypoints))
 interpolator = String ()
-interpolator.data = "linear"
+interpolator.data = "cubic"
 
 rospy.wait_for_service ('start_waypoint_list')
 

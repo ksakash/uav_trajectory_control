@@ -496,7 +496,7 @@ class DPControllerLocalPlanner(object):
 
     def has_finished(self):
         # return self._traj_interpolator.has_finished()
-        if (self.calc_dist() < 0.05):
+        if (self.calc_dist() < 0.2):
             return True
         else:
             return False

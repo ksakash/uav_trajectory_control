@@ -3,3 +3,4 @@ __pycache__
 waypoints_*
 temp_*
 plan_*
+cfg

@@ -42,7 +42,7 @@ def is_trajectory_complete (request):
 
 def achieved (target_wp):
     freq_thres = 5
-    dist_thres = 0.5
+    dist_thres = 0.3
 
     count = 20
     rate = rospy.Rate (count)
