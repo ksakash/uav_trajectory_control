@@ -26,7 +26,7 @@ curr_pose = PoseStamped ()
 
 start_x = rospy.get_param ("x", 0)
 start_y = rospy.get_param ("y", 0)
-height = 20 # for the waypoints not for the takeoff
+height = 10 # for the waypoints not for the takeoff
 
 def state_cb (data):
     global current_state
@@ -50,7 +50,7 @@ def process_input (filename):
         wp.point.x = (x - start_x) * unit_length
         wp.point.y = (y - start_y) * unit_length
         wp.point.z = z
-        wp.max_forward_speed = 5
+        wp.max_forward_speed = 0.5
 
         plan.append (wp)
 
@@ -108,12 +108,12 @@ else:
 time.sleep (5)
 
 print (uav_name, ": reading input..")
-file = 'long'
+file = '9x9'
 filename = "/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/" + file + "_" + str (id)
 waypoints = process_input (filename)
 print ("length of plan:", len (waypoints))
 interpolator = String ()
-interpolator.data = "cubic"
+interpolator.data = "linear"
 
 rospy.wait_for_service ('start_waypoint_list')
 
@@ -140,7 +140,7 @@ while not rospy.is_shutdown ():
 
 print (uav_name, ": completed the mission!!")
 
-rtl = False
+rtl = True
 
 if rtl:
     print (uav_name, ": RTL mode ...")

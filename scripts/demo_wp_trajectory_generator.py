@@ -1,3 +1,4 @@
+import rospy
 import roslib
 import numpy as np
 import matplotlib.pyplot as plt
@@ -54,61 +55,9 @@ def run_generator(waypoint_set, interp_method):
     ax.grid(True)
     ax.set_title(interp_method)
 
-    # Position and orientation plot
-    '''
-    fig = plt.figure()
-    ax = fig.add_subplot(211)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.pos[i] for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Position - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-
-    ax = fig.add_subplot(212)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.rot[i] * 180 / np.pi for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Rotation - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(211)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.vel[i] for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Linear velocity - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-
-    ax = fig.add_subplot(212)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.vel[i+3] for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Angular velocity - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(211)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.acc[i] for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Linear accelerations - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-
-    ax = fig.add_subplot(212)
-    for i in range(3):
-        ax.plot([p.t for p in pnts], [p.acc[i+3] for p in pnts], label='%d' % i)
-    ax.legend()
-    ax.grid(True)
-    ax.set_title('Angular accelerations - ' + interp_method)
-    ax.set_xlim(pnts[0].t, pnts[-1].t)
-    '''
 
 if __name__ == '__main__':
+    rospy.init_node ('demo_trajectory_generator')
     wp_set = uav_waypoints.WaypointSet()
     speed = 0.1
     filename = '/home/ksakash/projects/control_ws/src/uav_trajectory_control/cfg/long_0'
@@ -121,8 +70,7 @@ if __name__ == '__main__':
         (x, y, z) = (int (line.split(' ')[0]), int (line.split(' ')[1]), height)
         wp_set.add_waypoint (uav_waypoints.Waypoint (x, y, z, speed))
 
-    run_generator(wp_set, 'cubic')
-    # run_generator(wp_set, 'linear')
+    run_generator(wp_set, 'lipb')
 
     plt.show()
 
